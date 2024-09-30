@@ -126,3 +126,7 @@ map1 <- tm_shape(world_vector) +
 tmap_save(map1, here("tmap-example.png"))
 ```
 
+```{r}
+# troubleshoot
+```
+
