@@ -1,0 +1,91 @@
+---
+title: "eds223-discussion1"
+format: html
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+# Load packages
+library(here)
+library(tidyverse)
+library(stars)
+library(sf)
+library(tmap)
+library(viridisLite)
+```
+
+```{r}
+# Read in spatial objects for Easter Island
+
+# .tif are raster data (stars)
+# .gpkg are vector data (sf)
+ei_points <- sf::read_sf(here::here( "data","easter_island", "ei_points.gpkg"))
+
+ei_elev <- stars::read_stars(here::here( "data","easter_island", "ei_elev.tif"))
+
+ei_borders <- sf::read_sf(here::here( "data","easter_island", "ei_border.gpkg"))
+
+ei_roads <- sf::read_sf(here::here("data", "easter_island", "ei_roads.gpkg"))
+
+volcanoes <- subset(ei_points, type == "volcano")
+```
+
+```{r}
+# Create a map of Easter Island
+tm_shape(ei_borders)+
+  tm_borders()+
+tm_shape(ei_roads) +
+  tm_lines() + 
+tm_shape(ei_points) +
+  tm_dots()
+```
+
+```{r}
+# Create a amp of Easter Island and...
+# ...denote the island’s borders and continuous elevation
+# ...denote the island’s volcanoes and roads
+# ...play with the color palette and essential map elements
+
+tm_shape(ei_elev) +
+  tm_raster(palette = c("yellow", "darkgreen"),
+            title = "elevation") +
+tm_shape(ei_borders)+
+  tm_borders() +
+tm_shape(ei_roads) +
+  tm_lines() + 
+tm_shape(volcanoes) +
+  tm_symbols(shape = 24,
+             col = "orange") +
+tm_shape(ei_points) +
+  tm_dots() +
+  tm_compass(position = c("right", "top")) +
+  tm_scale_bar() +
+  tm_layout(bg.color = "lightblue",
+            main.title = "Easter Island",
+            frame = FALSE)
+```
+
+```{r}
+# Create an interactive map of Easter Island
+tmap_mode("view")
+
+tm_shape(ei_elev) +
+  tm_raster(palette = c("yellow", "darkgreen"),
+            title = "elevation") +
+tm_shape(ei_borders)+
+  tm_borders() +
+tm_shape(ei_roads) +
+  tm_lines() + 
+tm_shape(volcanoes) +
+  tm_symbols(shape = 24,
+             col = "orange") +
+tm_shape(ei_points) +
+  tm_dots() +
+  tm_compass(position = c("right", "top")) +
+  tm_scale_bar() +
+  tm_layout(bg.color = "lightblue",
+            main.title = "Easter Island",
+            frame = FALSE)
+```
+
